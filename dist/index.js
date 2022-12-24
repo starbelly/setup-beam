@@ -6102,10 +6102,6 @@ async function main() {
 }
 
 async function installOTP(otpSpec, osVersion) {
-  if (isStrictVersion()) {
-    return otpSpec
-  }
-
   let otpVersion = ''
 
   if (isStrictVersion()) {
