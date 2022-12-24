@@ -6131,7 +6131,7 @@ async function maybeInstallElixir(elixirSpec, otpVersion) {
   if (elixirSpec) {
     let elixirVersion = ''
     if (isStrictVersion()) {
-      elixirVersion = elixirSpec
+      elixirVersion = maybePrependWithV(elixirSpec)
     } else {
       elixirVersion = await getElixirVersion(elixirSpec, otpVersion)
     }
@@ -6172,7 +6172,7 @@ async function maybeInstallGleam(gleamSpec) {
 
   if (gleamSpec) {
     if (isStrictVersion()) {
-      gleamVersion = gleamSpec
+      gleamVersion = maybePrependWithV(gleamSpec)
     } else {
       gleamVersion = await getGleamVersion(gleamSpec)
     }
