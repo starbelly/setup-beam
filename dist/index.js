@@ -6105,7 +6105,7 @@ async function installOTP(otpSpec, osVersion) {
   let otpVersion = ''
 
   if (isStrictVersion()) {
-    otpVersion = otpSpec
+    otpVersion = `OTP-${otpSpec}`
   } else {
     otpVersion = await getOTPVersion(otpSpec, osVersion)
   }
@@ -6193,7 +6193,7 @@ async function maybeInstallRebar3(rebar3Spec) {
     rebar3Version = 'nightly'
   } else {
     if (isStrictVersion()) {
-      rebar3Version = rebar3spec
+      rebar3Version = rebar3Spec
     } else {
       rebar3Version = await getRebar3Version(rebar3Spec)
     }
