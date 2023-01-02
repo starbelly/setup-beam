@@ -347,11 +347,7 @@ function isStrictVersion() {
 }
 
 function isExactVersion(spec) {
-  if (semver.parse(spec)) {
-    return true
-  } else {
-    return false
-  }
+  return (semver.parse(spec) && true) || false
 }
 
 function getVersionFromSpec(spec, versions, maybePrependWithV0) {
