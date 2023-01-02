@@ -6106,7 +6106,7 @@ async function installOTP(otpSpec, osVersion) {
 
   if (isStrictVersion()) {
     if (isVersion(otpSpec)) {
-        otpVersion = `OTP-${otpSpec}` // ... it's a version!
+      otpVersion = `OTP-${otpSpec}` // ... it's a version!
     } else {
       otpVersion = otpSpec
     }
@@ -6131,10 +6131,8 @@ async function maybeInstallElixir(elixirSpec, otpVersion) {
   if (elixirSpec) {
     let elixirVersion = ''
     if (isExactVersion(elixirSpec)) {
-        core.debug("Got an exact version for elixir")
       elixirVersion = maybePrependWithV(elixirSpec)
     } else {
-      core.debug("Did not get an exact version for elixir")
       elixirVersion = await getElixirVersion(elixirSpec, otpVersion)
     }
     console.log(`##[group]Installing Elixir ${elixirVersion}`)
@@ -6173,11 +6171,9 @@ async function maybeInstallGleam(gleamSpec) {
   let gleamVersion = ''
 
   if (gleamSpec) {
-    if (isExactVersion(gleamspec)) {
-        core.debug("Got an exact version for gleam")
+    if (isExactVersion(gleamSpec)) {
       gleamVersion = maybePrependWithV(gleamSpec)
     } else {
-         core.debug("Did not get an exact version for gleam")
       gleamVersion = await getGleamVersion(gleamSpec)
     }
 
@@ -6201,10 +6197,8 @@ async function maybeInstallRebar3(rebar3Spec) {
     rebar3Version = 'nightly'
   } else {
     if (isExactVersion(rebar3Spec)) {
-        core.debug("Got an exact version for rebar3")
       rebar3Version = rebar3Spec
     } else {
-         core.debug("Did not get an exact version for rebar3")
       rebar3Version = await getRebar3Version(rebar3Spec)
     }
     console.log(`##[group]Installing rebar3 ${rebar3Version}`)
@@ -6405,11 +6399,8 @@ function isStrictVersion() {
 }
 
 function isExactVersion(spec) {
-  core.debug(semver.parse(spec))
   if (semver.parse(spec)) {
     return true
-  } else {
-    return false
   }
 }
 

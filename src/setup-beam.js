@@ -119,7 +119,7 @@ async function maybeInstallGleam(gleamSpec) {
   let gleamVersion = ''
 
   if (gleamSpec) {
-    if (isExactVersion(gleamspec)) {
+    if (isExactVersion(gleamSpec)) {
       gleamVersion = maybePrependWithV(gleamSpec)
     } else {
       gleamVersion = await getGleamVersion(gleamSpec)
@@ -349,8 +349,6 @@ function isStrictVersion() {
 function isExactVersion(spec) {
   if (semver.parse(spec)) {
     return true
-  } else {
-    return false
   }
 }
 
