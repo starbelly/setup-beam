@@ -349,6 +349,8 @@ function isStrictVersion() {
 function isExactVersion(spec) {
   if (semver.parse(spec)) {
     return true
+  } else {
+    return false
   }
 }
 
