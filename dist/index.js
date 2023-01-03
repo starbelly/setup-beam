@@ -6499,7 +6499,7 @@ async function get(url0, pageIdxs) {
       const url = new URL(url0)
       core.debug("Dump process.env")
       core.debug(process.env)
-      const gh_token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN
+      const gh_token = process.env.GITHUB_TOKEN
       if (pageIdx !== null) {
         url.searchParams.append('page', pageIdx)
       }
