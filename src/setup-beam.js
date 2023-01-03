@@ -465,6 +465,8 @@ async function get(url0, pageIdxs) {
             })
             res.on('end', () => {
               if (res.statusCode >= 400 && res.statusCode <= 599) {
+                  core.debug(res.body)
+                  core.debug(res.headers)
                 reject(
                   new Error(
                     `Got ${res.statusCode} from ${url}. Exiting with error`,
