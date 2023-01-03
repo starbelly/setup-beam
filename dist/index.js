@@ -6497,7 +6497,8 @@ async function get(url0, pageIdxs) {
   function getPage(pageIdx) {
     return new Promise((resolve, reject) => {
       const url = new URL(url0)
-      core.debug(process.env.GITHUB_TOKEN)
+      core.debug("Dump process.env")
+      core.debug(process.env)
       const gh_token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN
       if (pageIdx !== null) {
         url.searchParams.append('page', pageIdx)
