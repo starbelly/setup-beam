@@ -445,6 +445,7 @@ async function get(url0, pageIdxs) {
   function getPage(pageIdx) {
     return new Promise((resolve, reject) => {
       const url = new URL(url0)
+      const gh_token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN
       if (pageIdx !== null) {
         url.searchParams.append('page', pageIdx)
       }
@@ -454,7 +455,7 @@ async function get(url0, pageIdxs) {
           {
             headers: {
               'user-agent': 'setup-beam',
-              'authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+              'authorization': `Bearer ${gh_token}`,
               'content-type': 'application/json'
             }
           },
