@@ -454,8 +454,9 @@ async function get(url0, pageIdxs) {
           {
             headers: {
               'user-agent': 'setup-beam',
-               authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+              'authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
               'content-type': 'application/json'
+            }
           },
           (res) => {
             let data = ''

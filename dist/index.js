@@ -6504,7 +6504,11 @@ async function get(url0, pageIdxs) {
         .get(
           url,
           {
-            headers: { 'user-agent': 'setup-beam' },
+            headers: {
+              'user-agent': 'setup-beam',
+              'authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+              'content-type': 'application/json'
+            }
           },
           (res) => {
             let data = ''
