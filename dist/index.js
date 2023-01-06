@@ -7613,7 +7613,7 @@ async function get(url0, pageIdxs) {
         'user-agent': 'setup-beam',
       }
       const GithubToken =
-        getInput('github_token', false) || process.env.GITHUB_TOKEN
+        getInput('github_token', false)
 
       if (GithubToken) {
         headers.authorization = `Bearer ${GithubToken}`
