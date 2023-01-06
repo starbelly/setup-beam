@@ -50,7 +50,18 @@ async function main() {
 }
 
 async function installOTP(otpSpec, osVersion) {
-  const otpVersion = await getOTPVersion(otpSpec, osVersion)
+  let otpVersion = ''
+
+  if (isStrictVersion()) {
+    if (isVersion(otpSpec)) {
+      otpVersion = `OTP-${otpSpec}` // ... it's a version!
+    } else {
+      otpVersion = otpSpec
+    }
+  } else {
+    otpVersion = await getOTPVersion(otpSpec, osVersion)
+  }
+
   console.log(
     `##[group]Installing Erlang/OTP ${otpVersion} - built on ${osVersion}`,
   )
@@ -66,7 +77,12 @@ async function maybeInstallElixir(elixirSpec, otpVersion) {
   let installed = false
 
   if (elixirSpec) {
-    const elixirVersion = await getElixirVersion(elixirSpec, otpVersion)
+    let elixirVersion = ''
+    if (isExactVersion(elixirSpec)) {
+      elixirVersion = maybePrependWithV(elixirSpec)
+    } else {
+      elixirVersion = await getElixirVersion(elixirSpec, otpVersion)
+    }
     console.log(`##[group]Installing Elixir ${elixirVersion}`)
     await installer.installElixir(elixirVersion)
     core.setOutput('elixir-version', elixirVersion)
@@ -100,8 +116,15 @@ async function mix(shouldMix, what) {
 async function maybeInstallGleam(gleamSpec) {
   let installed = false
 
+  let gleamVersion = ''
+
   if (gleamSpec) {
-    const gleamVersion = await getGleamVersion(gleamSpec)
+    if (isExactVersion(gleamSpec)) {
+      gleamVersion = maybePrependWithV(gleamSpec)
+    } else {
+      gleamVersion = await getGleamVersion(gleamSpec)
+    }
+
     console.log(`##[group]Installing Gleam ${gleamVersion}`)
     await installer.installGleam(gleamVersion)
     core.setOutput('gleam-version', gleamVersion)
@@ -118,9 +141,11 @@ async function maybeInstallRebar3(rebar3Spec) {
   let installed = false
   let rebar3Version
 
-  if (rebar3Spec) {
-    if (rebar3Spec === 'nightly') {
-      rebar3Version = 'nightly'
+  if (rebar3Spec === 'nightly') {
+    rebar3Version = 'nightly'
+  } else {
+    if (isExactVersion(rebar3Spec)) {
+      rebar3Version = rebar3Spec
     } else {
       rebar3Version = await getRebar3Version(rebar3Spec)
     }
@@ -321,6 +346,10 @@ function isStrictVersion() {
   return getInput('version-type', false) === 'strict'
 }
 
+function isExactVersion(spec) {
+  return (semver.parse(spec) && true) || false
+}
+
 function getVersionFromSpec(spec, versions, maybePrependWithV0) {
   let version = null
 
@@ -419,9 +448,13 @@ async function get(url0, pageIdxs) {
       const headers = {
         'user-agent': 'setup-beam',
       }
-      if (process.env.GITHUB_TOKEN) {
-        headers.authorization = `Bearer ${process.env.GITHUB_TOKEN}`
+      const gh_token =
+        getInput('github_token', false) || process.env.GITHUB_TOKEN
+
+      if (gh_token) {
+        headers.authorization = `Bearer ${gh_token}`
       }
+
       if (pageIdx !== null) {
         url.searchParams.append('page', pageIdx)
       }
