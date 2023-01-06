@@ -7641,11 +7641,11 @@ async function get(url0, pageIdxs) {
       const headers = {
         'user-agent': 'setup-beam',
       }
-      const gh_token =
+      const GithubToken =
         getInput('github_token', false) || process.env.GITHUB_TOKEN
 
-      if (gh_token) {
-        headers.authorization = `Bearer ${gh_token}`
+      if (GithubToken) {
+        headers.authorization = `Bearer ${GithubToken}`
       }
 
       if (pageIdx !== null) {
