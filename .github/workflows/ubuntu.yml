@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - ease-usage-of-github-tokens-test
   pull_request:
     branches:
       - main
