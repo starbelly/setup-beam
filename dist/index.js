@@ -7416,13 +7416,19 @@ async function getGleamVersion(gleamSpec0) {
 }
 
 async function getRebar3Version(r3Spec) {
-  const rebar3Versions = await getRebar3Versions()
-  const rebar3Version = getVersionFromSpec(r3Spec, rebar3Versions)
-  if (rebar3Version === null) {
-    throw new Error(
-      `Requested rebar3 version (${r3Spec}) not found in version list ` +
-        "(should you be using option 'version-type': 'strict'?)",
-    )
+  let rebar3Version
+
+  if (isSemVer(r3Spec)) {
+    rebar3Version = r3Spec
+  } else {
+    const rebar3Versions = await getRebar3Versions()
+    rebar3Version = getVersionFromSpec(r3Spec, rebar3Versions)
+    if (rebar3Version === null) {
+      throw new Error(
+        `Requested rebar3 version (${r3Spec}) not found in version list ` +
+          "(should you be using option 'version-type': 'strict'?)",
+      )
+    }
   }
 
   return rebar3Version
