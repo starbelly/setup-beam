@@ -7243,6 +7243,7 @@ async function main() {
 }
 
 async function installOTP(otpSpec, osVersion) {
+    // comment
   const otpVersion = await getOTPVersion(otpSpec, osVersion)
   console.log(
     `##[group]Installing Erlang/OTP ${otpVersion} - built on ${osVersion}`,
