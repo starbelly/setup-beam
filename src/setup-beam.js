@@ -160,6 +160,9 @@ async function getOTPVersion(otpSpec0, osVersion) {
 async function getElixirVersion(exSpec0, otpVersion0) {
   let elixirVersionForDownload
   if (isSemVer(exSpec0)) {
+    core.debug(
+      'SemVer specified for Elixir, skipping retrieval of versions from GitHub API',
+    )
     elixirVersionForDownload = exSpec0
   } else {
     const otpVersion = otpVersion0.match(/^([^-]+-)?(.+)$/)[2]
@@ -206,6 +209,9 @@ async function getGleamVersion(gleamSpec0) {
   let gleamVersion
 
   if (isSemVer(gleamSpec0)) {
+    core.debug(
+      'SemVer specified for Gleam, skipping retrieval of versions from GitHub API',
+    )
     gleamVersion = gleamSpec0
   } else {
     const gleamSpec = gleamSpec0.match(/^v?(.+)$/)
@@ -226,6 +232,9 @@ async function getRebar3Version(r3Spec) {
   let rebar3Version
 
   if (isSemVer(r3Spec)) {
+    core.debug(
+      'SemVer specified for rebar3, skipping retrieval of versions from GitHub API',
+    )
     rebar3Version = r3Spec
   } else {
     const rebar3Versions = await getRebar3Versions()
