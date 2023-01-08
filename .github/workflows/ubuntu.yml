@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - do-not-hit-api-when-strict-pre
   pull_request:
     types: [opened, synchronize]
 
