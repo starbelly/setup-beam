@@ -158,36 +158,45 @@ async function getOTPVersion(otpSpec0, osVersion) {
 }
 
 async function getElixirVersion(exSpec0, otpVersion0) {
-  const otpVersion = otpVersion0.match(/^([^-]+-)?(.+)$/)[2]
-  const otpVersionMajor = otpVersion.match(/^([^.]+).*$/)[1]
-  const elixirVersions = await getElixirVersions()
-  const semverVersions = Array.from(elixirVersions.keys()).sort()
-  const exSpec = exSpec0.replace(/-otp-.*$/, '')
-  const elixirVersionFromSpec = getVersionFromSpec(exSpec, semverVersions, true)
-  let elixirVersionForDownload = elixirVersionFromSpec
-  if (isVersion(otpVersionMajor)) {
-    elixirVersionForDownload = `${elixirVersionFromSpec}-otp-${otpVersionMajor}`
-  }
-  if (elixirVersionFromSpec === null) {
-    throw new Error(
-      `Requested Elixir version (${exSpec0}) not found in version list ` +
-        "(should you be using option 'version-type': 'strict'?)",
-    )
-  }
-
-  const elixirVersionComp = elixirVersions.get(elixirVersionFromSpec)
-  if (
-    (elixirVersionComp && elixirVersionComp.includes(otpVersionMajor)) ||
-    !isVersion(otpVersionMajor)
-  ) {
-    core.info(
-      `Using Elixir ${elixirVersionFromSpec} (built for Erlang/OTP ${otpVersionMajor})`,
-    )
+  let elixirVersionForDownload
+  if (isSemVer(exSpec0)) {
+    elixirVersionForDownload = exSpec0
   } else {
-    throw new Error(
-      `Requested Elixir / Erlang/OTP version (${exSpec0} / ${otpVersion0}) not ` +
-        'found in version list (did you check Compatibility between Elixir and Erlang/OTP?)',
+    const otpVersion = otpVersion0.match(/^([^-]+-)?(.+)$/)[2]
+    const otpVersionMajor = otpVersion.match(/^([^.]+).*$/)[1]
+    const elixirVersions = await getElixirVersions()
+    const semverVersions = Array.from(elixirVersions.keys()).sort()
+    const exSpec = exSpec0.replace(/-otp-.*$/, '')
+    const elixirVersionFromSpec = getVersionFromSpec(
+      exSpec,
+      semverVersions,
+      true,
     )
+    elixirVersionForDownload = elixirVersionFromSpec
+    if (isVersion(otpVersionMajor)) {
+      elixirVersionForDownload = `${elixirVersionFromSpec}-otp-${otpVersionMajor}`
+    }
+    if (elixirVersionFromSpec === null) {
+      throw new Error(
+        `Requested Elixir version (${exSpec0}) not found in version list ` +
+          "(should you be using option 'version-type': 'strict'?)",
+      )
+    }
+
+    const elixirVersionComp = elixirVersions.get(elixirVersionFromSpec)
+    if (
+      (elixirVersionComp && elixirVersionComp.includes(otpVersionMajor)) ||
+      !isVersion(otpVersionMajor)
+    ) {
+      core.info(
+        `Using Elixir ${elixirVersionFromSpec} (built for Erlang/OTP ${otpVersionMajor})`,
+      )
+    } else {
+      throw new Error(
+        `Requested Elixir / Erlang/OTP version (${exSpec0} / ${otpVersion0}) not ` +
+          'found in version list (did you check Compatibility between Elixir and Erlang/OTP?)',
+      )
+    }
   }
 
   return maybePrependWithV(elixirVersionForDownload)
@@ -316,6 +325,10 @@ async function getRebar3Versions() {
       .forEach((v) => rebar3VersionsListing.push(v))
   })
   return rebar3VersionsListing
+}
+
+function isSemVer(spec) {
+  return (semver.parse(spec) && true) || false
 }
 
 function isStrictVersion() {
