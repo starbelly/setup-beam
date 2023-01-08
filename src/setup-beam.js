@@ -203,14 +203,20 @@ async function getElixirVersion(exSpec0, otpVersion0) {
 }
 
 async function getGleamVersion(gleamSpec0) {
-  const gleamSpec = gleamSpec0.match(/^v?(.+)$/)
-  const gleamVersions = await getGleamVersions()
-  const gleamVersion = getVersionFromSpec(gleamSpec[1], gleamVersions, true)
-  if (gleamVersion === null) {
-    throw new Error(
-      `Requested Gleam version (${gleamSpec0}) not found in version list ` +
-        "(should you be using option 'version-type': 'strict'?)",
-    )
+  let gleamVersion
+
+  if (isSemVer(gleamSpec0)) {
+    gleamVersion = gleamSpec0
+  } else {
+    const gleamSpec = gleamSpec0.match(/^v?(.+)$/)
+    const gleamVersions = await getGleamVersions()
+    gleamVersion = getVersionFromSpec(gleamSpec[1], gleamVersions, true)
+    if (gleamVersion === null) {
+      throw new Error(
+        `Requested Gleam version (${gleamSpec0}) not found in version list ` +
+          "(should you be using option 'version-type': 'strict'?)",
+      )
+    }
   }
 
   return maybePrependWithV(gleamVersion, gleamVersion)
