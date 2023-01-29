@@ -7331,6 +7331,7 @@ async function maybeInstallRebar3(rebar3Spec) {
 
 async function getOTPVersion(otpSpec0, osVersion) {
   const otpVersions = await getOTPVersions(osVersion)
+  core.debug(otpVersions)
   let otpSpec = otpSpec0 // might be a branch (?)
   const otpVersion = getVersionFromSpec(
     otpSpec,
