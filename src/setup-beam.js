@@ -223,6 +223,7 @@ async function getRebar3Version(r3Spec) {
 async function getOTPVersions(osVersion) {
   let originListing
   let pageIdxs
+  core.debug(osVersion)
   if (process.platform === 'linux') {
     originListing = `https://repo.hex.pm/builds/otp/${osVersion}/builds.txt`
     pageIdxs = [null]
