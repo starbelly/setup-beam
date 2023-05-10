@@ -17,4 +17,16 @@ Start-Process "${FILE_OUTPUT}" "/S /D=${DIR_FOR_BIN}" -Wait
 Write-Output "Installed Erlang/OTP version follows"
 & "${DIR_FOR_BIN}/bin/erl.exe" "+V" | Write-Output
 
+$ProgressPreference="Continue"
+
+$cmdArgList = @(
+    "-noshell",
+    "-eval", "erlang:display(hey_look_here_it_worked_erl_ran_with_multiple_arguments_given).",
+	"-s", "erlang", "halt"
+)
+
+Write-Output "DEBUG => Run erl.exe with -noshell -eval erlang:display(hey_look_here_it_worked_erl_ran_with_multiple_arguments_given). -s s erlang halt"
+& "${DIR_FOR_BIN}/bin/erl.exe" $cmdArgList | Write-Output
+
+
 "INSTALL_DIR_FOR_OTP=${DIR_FOR_BIN}" | Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
